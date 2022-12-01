@@ -9,7 +9,13 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('views', './views');
 
-app.use(__dirname + 'public')
+app.use(express.static(__dirname + 'public'))
+
+app.use((req, res, next) => {
+    res.locals.showTests = app.get('env') !== 'production' && req.query.test === '1';
+
+    next();
+})
 
 app.get('/', (req, res) => {
     res.render('home')
